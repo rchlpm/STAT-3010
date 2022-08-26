@@ -1,0 +1,23 @@
+---
+title: "Lab1"
+author: "Michael"
+date: "1/24/2022"
+output: html_document
+---
+# Upload a dataset
+
+This is my dataset
+```{r}
+data_set<-read.csv("Salary.csv")
+head(data_set)
+```
+
+# Q2.) plot histogram
+```{r}
+hist(data_set$Salary, xlab = "Salary", breaks = 10, main = "Histogram of Salary")
+
+```
+
+# Comments
+
+1.) There is a gap in the distribution of the data.

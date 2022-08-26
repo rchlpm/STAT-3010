@@ -1,0 +1,57 @@
+---
+title: "QuizFive"
+author: "Rachel Meredith"
+date: "4/11/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(readr)
+library(multcompView)
+library(ggplot2)
+library(dplyr)
+library(qqplotr)
+```
+
+## R Markdown
+
+# Q2
+
+a.) My Dataset
+
+```{r}
+# My Data
+data_set <- read.csv("C:/Users/rache/Documents/STAT 3010/Quiz5_data.csv", header = T)
+
+# Linear Regressions
+Linear_fit<-lm(Weight ~.,data = data_set)
+Linear_fit$coefficients
+plot(Linear_fit)
+
+# normal fit
+fit1<-lm(Weight  ~., data=data_set)
+fit1
+
+```
+The observations follow normally. 
+
+# Question 6
+a.) ANOVA Table
+```{r}
+# My data
+data2 <- read.csv("C:/Users/rache/Documents/STAT 3010/ANOVAquiz5.csv", header = T)
+
+str(data2)
+
+# Creating a variable a factor for the ANOVA table
+data2$oil <- as.factor(data2$oil)
+data2$water <- as.factor(data2$water)
+data2$WorkingCurrent <- as.factor(data2$WorkingCurrent)
+str(data2)
+
+#analysis of variance
+anova <- aov(Oil ~ Water*WorkingCurrent, data = data2)
+summary(anova)
+```
+

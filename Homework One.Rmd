@@ -1,0 +1,41 @@
+---
+title: "Homework One"
+author: "Rachel Meredith"
+date: "1/26/2022"
+output: html_document
+---
+
+
+
+## R Markdown
+
+# Q14
+
+a.)
+My Data set
+```{r}
+data_set <- read.csv("C:/Users/rache/Documents/STAT 3010/Hw1_Q14_data.csv", header = T)
+```
+Stem Plot
+```{r}
+stem(data_set$shower_flow_rate)
+```
+
+capture.output(stem(data_set$score))
+file <- "C:/Users/rache/Documents/STAT 3010/Ex.1.2_Q14_data.txt"
+
+b.)
+Typical flow rate is the flow rate that appears the most. So we would take one of the values from 6. ex = 6.7
+
+c.)
+Highly concentrated, only one outlier. 
+
+d.)
+distribution is left skewed since there are more values below the typical flow rate.
+
+e.)
+Outlier would be 18.9.
+
+# 22.)
+
+a.)

@@ -1,0 +1,174 @@
+---
+title: "Final Project"
+author: "Rachel Meredith"
+date: "4/26/2022"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(aqp)
+library(tidyverse)
+library(DataExplorer)
+library(ggplot2)
+library(knitr)
+library(rstatix)
+library(Sleuth3)
+library(corrplot) #visualization of correlation
+library(ggcorrplot) #visualization of correlation
+library(reshape2) #melt function
+library(dplyr)
+library(readr)
+
+```
+
+### Dataset:  sexlierel.dat
+
+***
+
+Source: R.R. Clayton (1971). "Religiosity and Premarital Sexual
+Permissiveness: Elaboration of the Relationship and Debate,"
+Sociological Analysis, Vol. 32, #2, pp81-96
+
+Description: Tabulation among 4 scales of premarital sexual
+permissiveness, religiosity, propensity to lie and gender.
+
+Variables/Columns
+Gender   8    /* 1=Female, 2=Male  */
+Scale: 16  /* 1=Ritualistic, 2=Experiential, 3=Ideological, 4=Composite*/
+Premarital sexual permissiveness  24 /* 1=Low, 2=High */
+Propensity to Lie   32  /* 1=Lower, 2=Higher  */
+Religiosity   40  /*  1=Low, 2=High   */
+Count    46-48
+
+***
+
+###### Introduction
+Given the data above, I would like to determine the variation between the variables above. More specifically, is there a correlation between Religiosity and Premarital sexual permissiveness. Quantities are given to us through the value of count.  
+
+```{r}
+data_set <- read.csv("project_data.csv", header = TRUE)
+ 
+names(data_set)
+
+summary(data_set)
+
+```
+
+
+## eda
+```{r}
+kable(data_set[1:65,])
+lmOut <- lm(Religiosity ~ Count, data = data_set)
+summary(lmOut)
+
+```
+## Interperting the data
+
+About 1344 females and 934 males in this data. 
+
+335 females say they are ritualistic.
+  227 had low sexual permissiveness.
+  108 had high sexual permissiveness.
+  
+335 females say they are experimental. 
+  227 had low sexual permissiveness.
+  108 had high sexual permissiveness.
+  
+338 females say they are ideological.
+  230 had low sexual permissiveness.
+  108 had high sexual permissiveness.
+  
+336 females say they are composite. 
+  228 had low sexual permissiveness.
+  108 had high sexual permissiveness.
+
+***
+
+233 males say they are ritualistic.
+  100 had low sexual permissiveness.
+  133 had high sexual permissiveness.
+
+232 males say they are experimental. 
+  99 had low sexual permissiveness.
+  133 had high sexual permissiveness.
+  
+237 males say they are ideological.
+  102 had low sexual permissiveness.
+  135 had high sexual permissiveness.
+  
+232 males say they are composite. 
+  100 had low sexual permissiveness.
+  132 had high sexual permissiveness.
+
+## Boxplots
+```{r}
+boxplot(Count~Gender, data_set) 
+boxplot(Count~Religiosity, data_set)
+boxplot(Count~Premarital.Sexual.Permissiveness, data_set)
+boxplot(Count~Propensity.to.Lie, data_set)
+```
+# Analysis
+From the data given, we are look at four distinct groups.
+1. High religiosity individuals with low sexual permissiveness. 
+2. Low religiosity individuals with high sexual permissiveness. 
+3. High sexual permissiveness individuals with lower propensity to lie.
+4. Low sexual permissiveness individuals with higher propensity to lie. 
+
+## Simple Linear Regression
+```{r}
+data_1<-data_set
+Linear_fit<-lm(Count~Religiosity,data = data_1)
+Linear_fit$coefficients
+```
+
+CI
+```{r}
+confint(Linear_fit, level=0.95)
+```
+Above is the confidence Interval
+
+
+## Matrix
+```{r}
+pairs(data_set)
+```
+The count column is going to be the most hepful here. Indicates the number of indivuals in each group. 
+```{r}
+#linear regression
+fit1<-lm(Count ~., data=data_set)
+fit1
+fit2<-lm(Propensity.to.Lie ~., data=data_set)
+fit2
+fit3<-lm(Religiosity ~., data=data_set)
+fit3
+```
+
+```{r}
+# Obtaining CI for model coefficients
+confint(fit1, level=0.95)
+confint(fit2, level=0.95)
+confint(fit3, level=0.95)
+```
+
+```{r}
+# Diagnostic plots
+layout(matrix(c(1,2,3,4),2,2)) 
+plot(fit1)
+```
+
+# Analysis
+The points on the Q-Q plot roughly fall in a straight line. There are not enough observations that deviate from the line. We can declare that the residuals are normally distributed. We can also tell from the Scale-Location graph that equal variance is not violated since the values on the plot don't deviate to far from the horizontal line. The residual vs. fitted plot tells us that the residuals follow a linear pattern since the red line is roughly horizontal. However, the Residuals vs Leverage plot has multiple values that fall with cook's distance. This means there could be overly influential point in our data set. 
+
+## Anova Table
+```{r}
+# compare models
+anova(fit1, fit2)
+```
+# Analysis 
+since a lot of the F values are larger than alpha, we would reject the null hypothesis for the different variables. 
+
+## Conclusion
+Through multiple linear regression, we are able to depict a model that estimates the relationship between one independent variable and one dependent variable using lines. We also used ANOVA tables to compare the population means. 
